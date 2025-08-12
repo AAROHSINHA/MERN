@@ -3,6 +3,7 @@ import CreateAccount from "./components/CreateAccount/CreateAccount";
 import LocalLogin from "./components/Login/LocalLogin";
 import JWTLogin from "./components/Login/JWTLogin";
 import OAuth2Login from "./components/Login/OAuthLogin";
+import Profile from "./components/Profile/Profile";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/local-login" element={<LocalLogin />} />
         <Route path="/jwt-login" element={<JWTLogin />} />
         <Route path="/oauth2-login" element={<OAuth2Login />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );
