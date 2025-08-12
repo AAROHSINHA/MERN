@@ -1,10 +1,14 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
+import { Top } from "./components/Top.tsx";
+import { Bottom } from "./components/Bottom.tsx";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateAccount() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -20,22 +24,49 @@ export default function CreateAccount() {
     }));
   };
 
+  const createAccount = (username: string, password: string, email: string) => {
+    const userData = {
+      username: username,
+      password: password,
+      email: email,
+    };
+
+    try {
+      const res = axios.post(
+        "http://localhost:3000/users/create-account",
+        userData,
+        {
+          withCredentials: true,
+        }
+      );
+
+      alert("ACCOUNT CREATED");
+      navigate("/");
+    } catch (error) {
+      alert("Some Error Occurred!");
+      console.warn("ERROR IN SIGN-IN");
+      console.log(error);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Account creation data:", formData);
-    // Add your account creation logic here
+    const username = formData.username;
+    const email = formData.email;
+    const password = formData.password;
+    const confirmPassword = formData.confirmPassword;
+    // if (password !== confirmPassword) {
+    //   alert("PASSWORDS DON'T MATCH");
+    //   return;
+    // }
+
+    createAccount(username, password, email);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-8">
       <div className="bg-black/20 backdrop-blur-sm rounded-lg p-8 border border-cyan-400/30 w-full max-w-md">
-        <h1 className="text-4xl font-bold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400">
-          CREATE ACCOUNT
-        </h1>
-
-        <div className="text-center mb-8">
-          <span className="text-green-400 text-lg">🚀 Join the Future 🚀</span>
-        </div>
+        <Top />
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Username Input */}
@@ -142,17 +173,7 @@ export default function CreateAccount() {
         </div>
 
         {/* Retro decorative elements */}
-        <div className="mt-8 flex justify-center space-x-4">
-          <div className="w-3 h-3 bg-pink-400 rounded-full animate-pulse"></div>
-          <div className="w-3 h-3 bg-cyan-400 rounded-full animate-pulse delay-75"></div>
-          <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse delay-150"></div>
-          <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse delay-300"></div>
-        </div>
-
-        {/* Additional retro grid pattern */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="w-full h-full bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent transform -skew-y-12"></div>
-        </div>
+        <Bottom />
       </div>
     </div>
   );

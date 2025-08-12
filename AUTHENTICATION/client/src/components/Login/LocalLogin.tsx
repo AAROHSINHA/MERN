@@ -2,8 +2,11 @@
 
 import type React from "react";
 import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function LocalLogin() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,10 +20,29 @@ export default function LocalLogin() {
     }));
   };
 
+  const LocalLogin = async (email: string, password: string) => {
+    const userData = {
+      email: email,
+      password: password,
+    };
+    try {
+      await axios.post("http://localhost:3000/users/local-login", userData, {
+        withCredentials: true,
+      });
+      navigate("/profile");
+      alert("Login Succesfull");
+    } catch (error) {
+      console.warn("Error Occurred");
+      console.log(error);
+      alert("ERROR LOGGING IN");
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Local login data:", formData);
-    // Add your local login logic here
+    const email = formData.email;
+    const password = formData.password;
+    LocalLogin(email, password);
   };
 
   return (
